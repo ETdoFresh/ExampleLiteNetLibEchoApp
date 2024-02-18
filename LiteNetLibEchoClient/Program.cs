@@ -47,7 +47,7 @@ namespace LiteNetLibEchoClient
                 var input = Console.ReadLine();
                 if (input == "quit") break;
                 if (IsRandomCommand(input, out var size)) input = ProcessRandomCommand(size);
-                SendToServer(input);
+                Send(input);
             }
             
             client.Stop();
@@ -61,11 +61,11 @@ namespace LiteNetLibEchoClient
             reader.Recycle();
         }
         
-        private static void SendToServer(string message)
+        private static void Send(string message)
         {
             var writer = new NetDataWriter();
             writer.Put(message);
-            client.FirstPeer.Send(writer, DeliveryMethod.ReliableOrdered);
+            client.SendToAll(writer, DeliveryMethod.ReliableOrdered);
         }
         
         private static bool IsRandomCommand(string input, out int size)
